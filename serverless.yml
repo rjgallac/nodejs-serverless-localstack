@@ -1,0 +1,40 @@
+service: nodejs-local
+frameworkVersion: '3'
+
+plugins:
+  - serverless-localstack
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  profile: localstack
+  region: us-east-1
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+custom:
+  localstack:
+    stages:
+      # list of stages for which the plugin should be enabled
+      - local
+    host: http://localhost  # optional - LocalStack host to connect to
+    edgePort: 4566  # optional - LocalStack edge port to connect to
+    # autostart: true  # optional - Start LocalStack in Docker on Serverless deploy
+    # networks: #optional - attaches the list of networks to the localstack docker container after startup
+    #   - host
+    #   - overlay
+    #   - my_custom_network
+    # lambda:
+    #   # Enable this flag to improve performance
+    #   mountCode: True
+    # docker:
+    #   # Enable this flag to run "docker ..." commands as sudo
+    #   sudo: False
+  stages:
+    local:
